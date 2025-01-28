@@ -1,21 +1,17 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-import Settings from './components/Settings.vue';
-import Password from './components/Password.vue';
-import DirPicker from './components/DirPicker.vue';
-import CurrentDevice from './components/CurrentDevice.vue';
-import Statistics from './components/Statistics.vue';
+import PasswordField from './components/PasswordField.vue'
+import DirPicker from './components/DirPicker.vue'
+import CurrentDevice from './components/CurrentDevice.vue'
+import StatisticsView from './components/StatisticsView.vue'
 
-import { onMounted } from 'vue';
-import { io } from "socket.io-client"
-import { useSocketStore } from './stores/socket';
+import { onMounted } from 'vue'
+import { useSocketStore } from './stores/socket'
 
-const socketStore = useSocketStore();
+const socketStore = useSocketStore()
 
 onMounted(() => {
-  socketStore.connect();
-});
+  socketStore.connect()
+})
 </script>
 
 <template>
@@ -23,10 +19,9 @@ onMounted(() => {
     <h1>SyncD</h1>
   </header>
   <div class="content">
-    <Settings />
     <div class="two-columns">
       <div>
-        <Password />
+        <PasswordField />
         <h2>Remotes</h2>
       </div>
       <div>
@@ -34,7 +29,7 @@ onMounted(() => {
         <h2>Current Device</h2>
         <CurrentDevice />
         <h2>Communication statistics</h2>
-        <Statistics />
+        <StatisticsView />
       </div>
     </div>
   </div>

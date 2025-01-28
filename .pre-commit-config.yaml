@@ -19,3 +19,19 @@ repos:
   rev: v1.16.23
   hooks:
     - id: typos
+- repo: local
+  hooks:
+    - id: lint-frontend
+      name: lint-frontend
+      language: script
+      files: ^frontend
+      entry: ./scripts/lint-frontend.sh
+      pass_filenames: false
+- repo: local
+  hooks:
+    - id: format-frontend
+      name: format-frontend
+      language: script
+      files: ^frontend
+      entry: ./scripts/format-frontend.sh
+      pass_filenames: false
