@@ -21,7 +21,7 @@ class UI(AsyncNamespace):
         self.statistics = statistics
 
     def on_connect(self, sid: str, environ: dict[str, Any]):
-        self.logger.info(f"UI Connection: {sid}")
+        self.logger.info(f"[UI] WebSocket connected: {sid}")
 
     def on_set_password(self, _key: str, password: str):
         self.settings.password = password
@@ -29,12 +29,19 @@ class UI(AsyncNamespace):
     async def on_check_dir(self, _key: str, dir: str):
         self.settings.dir = dir
         is_correct = utils.correct_dir(dir)
-        self.logger.info(f"Received {"not " if is_correct else ""}correct dir: {dir}")
+        self.logger.info(
+            f'[UI] WebSocket request correct_dir for "{dir}". '
+            f"Respond with: {is_correct}"
+        )
         await self.emit("correct_dir", is_correct)
 
-    async def on_get_stats(self, _key, str, _content: Any):
-        await self.emit("set_stats", self.settings)
+    async def on_get_stats(self, _key: str):
+        response = asdict(self.statistics)
+        self.logger.info(
+            "[UI] Websocket request get_stats. "
+            f"Respond with: {response}"
+        )
+        await self.emit("set_stats", response)
 
     def on_disconnect(self, sid: str):
-        self.logger.warning(f"UI Disconnect: {sid}")
-
+        self.logger.warning(f"[UI] WebSocket disconnected: {sid}")

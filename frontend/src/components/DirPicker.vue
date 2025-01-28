@@ -9,6 +9,7 @@ const { latency = 500 } = defineProps<{ latency?: number }>();
 const socketStore = useSocketStore()
 
 const verify = async () => {
+  console.log("WebSocket request: check_dir")
   socketStore.socket!.emit("check_dir", directory.value);
 };
 

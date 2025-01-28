@@ -15,27 +15,33 @@ interface IStatistics {
     pushes: number
     pulls: number
 
-    sentBytes: number
-    sentFiles: number
+    sent_bytes: number
+    sent_files: number
 
-    receivedBytes: number
-    receivedFiles: number
+    received_bytes: number
+    received_files: number
 };
 
 const socketStore = useSocketStore();
 const setStats = (receivedStats: IStatistics) => {
+  console.log(`WebSocket response set_stats: ${receivedStats}`)
   Object.assign(stats, {
     "Refreshes": receivedStats.refreshes,
     "Pushes":  receivedStats.pushes,
     "Pulls": receivedStats.pulls,
 
-    "Sent bytes": receivedStats.sentBytes,
-    "Sent files": receivedStats.sentFiles,
+    "Sent bytes": receivedStats.sent_bytes,
+    "Sent files": receivedStats.sent_files,
 
-    "Received bytes": receivedStats.receivedBytes,
-    "Received files": receivedStats.receivedFiles,
+    "Received bytes": receivedStats.received_bytes,
+    "Received files": receivedStats.received_files,
   });
 };
+
+const getStats = () => {
+  console.log("WebSocket request: get_stats")
+  socketStore.socket!.emit("get_stats");
+}
 
 onMounted(async () => {
   await (new Promise(resolve => setTimeout(resolve, 1000)));
@@ -43,7 +49,7 @@ onMounted(async () => {
   socketStore.socket!.on("set_stats", setStats);
 
   console.log("Setting up 'get_stats' interval");
-  interval = setInterval(() => {console.log("kek"); socketStore.socket!.emit("get_stats")}, latency);
+  interval = setInterval(getStats, latency);
 });
 
 onUnmounted(() => {

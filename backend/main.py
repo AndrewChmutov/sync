@@ -24,7 +24,7 @@ logger = logging.getLogger("uvicorn.asgi")
 
 socket_server = AsyncServer(async_mode="asgi", cors_allowed_origins="*")
 socket_server.register_namespace(UI(globals.settings, globals.stats, logger))
-socket_server.register_namespace(Nodes(globals.settings, globals.stats, logger))
+# socket_server.register_namespace(Nodes(globals.settings, globals.stats, logger))
 
 app = FastAPI()
 app.add_middleware(

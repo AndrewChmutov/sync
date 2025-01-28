@@ -20,9 +20,9 @@ export const useSocketStore = defineStore('store', {
       console.log(this.socket)
       this.socket.on("connect", () => {
         if (this.socket!.recovered) {
-          console.log("Websocket reconnected");
+          console.log("WebSocket reconnected");
         } else {
-          console.log("Websocket connected");
+          console.log("WebSocket connected");
         }
       });
 
@@ -31,7 +31,7 @@ export const useSocketStore = defineStore('store', {
       });
 
       this.socket.on('disconnect', () => {
-          console.log("Websocket disconnected");
+          console.log("WebSocket disconnected");
       });
     }
   }
