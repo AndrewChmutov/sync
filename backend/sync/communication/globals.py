@@ -1,6 +1,6 @@
 import time
 
-from communication.frontend.model import Settings, Statistics
+from sync.communication.frontend.model import Settings, Statistics
 
 start_time = time.time()
 settings = Settings()

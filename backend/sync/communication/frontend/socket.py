@@ -2,10 +2,10 @@ import logging
 from dataclasses import asdict
 from typing import Any
 
+import utils
 from socketio import AsyncNamespace
 
-import utils
-from communication.frontend.model import Settings, Statistics
+from sync.communication.frontend.model import Settings, Statistics
 
 
 class UI(AsyncNamespace):

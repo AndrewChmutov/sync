@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npm-run-all --parallel dev:vue dev:fastapi",
     "dev:vue": "vite",
-    "dev:fastapi": "cd ../backend && source .venv/bin/activate && uvicorn --reload main:top_app --ssl-keyfile ../cert/key.pem --ssl-certfile ../cert/cert.pem --log-level=debug --access-log --use-colors",
+    "dev:fastapi": "../scripts/run-backend.sh",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
