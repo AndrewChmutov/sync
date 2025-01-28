@@ -18,13 +18,13 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'https://localhost:8000',
-        secure: false,
+        secure: true,
         changeOrigin: true,
       },
       '/socket.io': {
         target: 'wss://localhost:8000',
         ws: true,
-        secure: false,
+        secure: true,
         changeOrigin: true,
       },
     }
