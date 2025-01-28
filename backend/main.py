@@ -1,30 +1,19 @@
-from pathlib import Path
-from dataclasses import dataclass
-from ssl import SSLContext
-import ssl
-from typing import Any
 import logging
-import time
+import ssl
+from ssl import SSLContext
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from socketio import AsyncServer, AsyncNamespace, ASGIApp
+from socketio import ASGIApp, AsyncServer
 
-from communication.frontend.model import Settings, Statistics
-from communication.frontend.socket import UI
-from communication.node.socket import Nodes
 from communication import globals
-
+from communication.frontend.socket import UI
 
 logger = logging.getLogger("uvicorn.asgi")
 
 
-
-
-
 socket_server = AsyncServer(async_mode="asgi", cors_allowed_origins="*")
 socket_server.register_namespace(UI(globals.settings, globals.stats, logger))
-# socket_server.register_namespace(Nodes(globals.settings, globals.stats, logger))
 
 app = FastAPI()
 app.add_middleware(
@@ -50,7 +39,7 @@ ssl_context.load_cert_chain("../cert/cert.pem", keyfile="../cert/key.pem")
 #     SETTINGS.dir = dir
 #
 #     return JSONResponse({
-#         "correct": 
+#         "correct":
 #     })
 
 logger.info("kek")

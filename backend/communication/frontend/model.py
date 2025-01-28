@@ -1,12 +1,13 @@
+import time
 from dataclasses import dataclass
 from pathlib import Path
-import time
 
 
 @dataclass
 class Settings:
     password: str = ""
     dir: str = ""
+
 
 @dataclass
 class LocalDevice:
@@ -16,13 +17,16 @@ class LocalDevice:
     n_bytes: int
     n_files: int
 
-    def __init__(self, path: str):
+    def __init__(self, path: str) -> None:
         self.uptime = time.time() - self._TIME
 
         entries = list(Path(path).glob("**/*"))
         self.n_files = sum(1 for entry in entries if entry.is_file())
         self.n_dirs = len(entries) - self.n_files
-        self.total_size = sum(entry.stat().st_size for entry in entries if entry.is_file())
+        self.total_size = sum(
+            entry.stat().st_size for entry in entries if entry.is_file()
+        )
+
 
 @dataclass
 class Statistics:

@@ -1,11 +1,12 @@
+import logging
 from dataclasses import asdict
 from typing import Any
-from socketio import AsyncNamespace
-import logging
 
-from communication.frontend.model import Settings, Statistics
-import main
+from socketio import AsyncNamespace
+
 import utils
+from communication.frontend.model import Settings, Statistics
+
 
 class UI(AsyncNamespace):
     def __init__(
@@ -13,20 +14,20 @@ class UI(AsyncNamespace):
         settings: Settings,
         statistics: Statistics,
         logger: logging.Logger,
-        namespace: Any = "/ui"
-    ):
+        namespace: Any = "/ui",
+    ) -> None:
         super().__init__(namespace)
         self.logger = logger
         self.settings = settings
         self.statistics = statistics
 
-    def on_connect(self, sid: str, environ: dict[str, Any]):
+    def on_connect(self, sid: str, environ: dict[str, Any]) -> None:
         self.logger.info(f"[UI] WebSocket connected: {sid}")
 
-    def on_set_password(self, _key: str, password: str):
+    def on_set_password(self, _key: str, password: str) -> None:
         self.settings.password = password
 
-    async def on_check_dir(self, _key: str, dir: str):
+    async def on_check_dir(self, _key: str, dir: str) -> None:
         self.settings.dir = dir
         is_correct = utils.correct_dir(dir)
         self.logger.info(
@@ -35,13 +36,12 @@ class UI(AsyncNamespace):
         )
         await self.emit("correct_dir", is_correct)
 
-    async def on_get_stats(self, _key: str):
+    async def on_get_stats(self, _key: str) -> None:
         response = asdict(self.statistics)
         self.logger.info(
-            "[UI] Websocket request get_stats. "
-            f"Respond with: {response}"
+            "[UI] Websocket request get_stats. " f"Respond with: {response}"
         )
         await self.emit("set_stats", response)
 
-    def on_disconnect(self, sid: str):
+    def on_disconnect(self, sid: str) -> None:
         self.logger.warning(f"[UI] WebSocket disconnected: {sid}")
