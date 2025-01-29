@@ -1,17 +1,17 @@
 import time
-from dataclasses import dataclass
 from pathlib import Path
+from typing import ClassVar
+
+from pydantic import BaseModel
 
 
-@dataclass
-class Settings:
+class Settings(BaseModel):
     password: str = ""
     dir: str = ""
 
 
-@dataclass
-class LocalDevice:
-    _TIME = time.time()
+class LocalDevice(BaseModel):
+    _TIME: ClassVar[float] = time.time()
     uptime: float
     n_dirs: int
     n_bytes: int
@@ -28,8 +28,7 @@ class LocalDevice:
         )
 
 
-@dataclass
-class Statistics:
+class Statistics(BaseModel):
     refreshes: int = 0
     pushes: int = 0
     pulls: int = 0

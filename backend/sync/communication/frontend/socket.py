@@ -1,8 +1,7 @@
 import logging
-from dataclasses import asdict
+from pathlib import Path
 from typing import Any
 
-import utils
 from socketio import AsyncNamespace
 
 from sync.communication.frontend.model import Settings, Statistics
@@ -29,7 +28,7 @@ class UI(AsyncNamespace):
 
     async def on_check_dir(self, _key: str, dir: str) -> None:
         self.settings.dir = dir
-        is_correct = utils.correct_dir(dir)
+        is_correct = self._is_correct_dir(dir)
         self.logger.info(
             f'[UI] WebSocket request correct_dir for "{dir}". '
             f"Respond with: {is_correct}"
@@ -37,7 +36,7 @@ class UI(AsyncNamespace):
         await self.emit("correct_dir", is_correct)
 
     async def on_get_stats(self, _key: str) -> None:
-        response = asdict(self.statistics)
+        response = self.statistics.model_dump()
         self.logger.info(
             "[UI] Websocket request get_stats. " f"Respond with: {response}"
         )
@@ -45,3 +44,7 @@ class UI(AsyncNamespace):
 
     def on_disconnect(self, sid: str) -> None:
         self.logger.warning(f"[UI] WebSocket disconnected: {sid}")
+
+    @staticmethod
+    def _is_correct_dir(dir: str) -> bool:
+        return dir.strip() != "" and Path(dir).expanduser().is_dir()
