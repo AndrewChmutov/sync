@@ -1,12 +1,19 @@
+from enum import StrEnum
+
 from pydantic import BaseModel
+
+
+class Status(StrEnum):
+    SYNC = "sync"
+    CHANGED = "changed"
+    OUTDATED = "outdated"
+
+
+class PathWithStatus:
+    path: str
+    status: Status
 
 
 class RemoteDir(BaseModel):
     ip: str
-    local_total: int
-    remote_total: int
-
-    # User perspective
-    in_sync: list[str]
-    changed: list[str]
-    outdated: list[str]
+    paths: list[PathWithStatus]

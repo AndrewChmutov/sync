@@ -1,8 +1,7 @@
 import time
-from pathlib import Path
-from typing import ClassVar
+from typing import ClassVar, Self
 
-from pydantic import BaseModel
+from pydantic import BaseModel, computed_field
 
 
 class Settings(BaseModel):
@@ -10,21 +9,33 @@ class Settings(BaseModel):
     dir: str = ""
 
 
-class LocalDevice(BaseModel):
-    _TIME: ClassVar[float] = time.time()
-    uptime: float
+class LocalState(BaseModel):
     n_dirs: int
     n_bytes: int
     n_files: int
 
-    def __init__(self, path: str) -> None:
-        self.uptime = time.time() - self._TIME
+    @classmethod
+    def empty(cls) -> Self:
+        return cls(n_dirs=0, n_files=0, n_bytes=0)
 
-        entries = list(Path(path).glob("**/*"))
-        self.n_files = sum(1 for entry in entries if entry.is_file())
-        self.n_dirs = len(entries) - self.n_files
-        self.total_size = sum(
-            entry.stat().st_size for entry in entries if entry.is_file()
+
+class CurrentDevice(BaseModel):
+    _TIME: ClassVar[float] = time.time()
+    path: str
+    local_state: LocalState | None
+    agent: str
+
+    @computed_field
+    @property
+    def uptime(self) -> float:
+        return time.time() - self._TIME
+
+    @classmethod
+    def empty(cls, agent: str | None = None) -> Self:
+        return cls(
+            path="Loading",
+            local_state=LocalState.empty(),
+            agent=agent or "Loading",
         )
 
 

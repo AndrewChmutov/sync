@@ -30,11 +30,15 @@ onMounted(async () => {
   console.log("Setting up 'correct_dir' event")
   socketStore.socket!.on('correct_dir', isOk)
 })
+
+const scan = () => {
+  socketStore.socket!.emit('scan', directory.value)
+}
 </script>
 
 <template>
   <div class="dirpicker-wrapper">
-    <button>{{ mode }}</button>
+    <button @click="scan" :style="{ color: mode ? '' : 'red' }">Scan</button>
     <input placeholder="Directory" :oninput="verifyLater" />
   </div>
 </template>
